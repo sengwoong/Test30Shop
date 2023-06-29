@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+id String @id @unique //아이디
+password String//비밀번호
+manager String//관리자여부
+}
+
+model Product {
+  id           String   @id @unique //상품아이디
+  productCategory  String // 어떤제품인지 카테고리 패션 , 악세사리, 화장품도, 폰케이스 ( id당 고유한 카테고리)
+  productCategoryDetial String //가방, 신발, 옷 안드로이드 화장품정류 ( id당 하나만필요한 값)
+  productBrend String //어떤브랜드인지 아이디당 한나만있으면돼는값
+  option         OptionType[] // 상품 새부정보 여려가지 있는옵션
+}
+
+model OptionType {   
+  optionTypeid Int @id  @default(autoincrement())//고유키
+  optionId        String  //상품아이디
+  optionName      String //사양이름 예 사이즈 기종 성별 등
+  optionContent   String   @unique  //사양설명 예 260  안드로이드 남성
+  quantityOfProducts Int // 상품개수
+  quantityOfSales Int// 판매한상품수
+  productId     Product @relation(fields: [optionId], references: [id]) //관계키 뿌려주기
+}
+
+
+
+
+
